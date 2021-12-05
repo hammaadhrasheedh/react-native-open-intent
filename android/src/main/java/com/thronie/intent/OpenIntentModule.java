@@ -61,6 +61,21 @@ public class OpenIntentModule extends ReactContextBaseJavaModule {
             intentPromise.reject("Failed", "NO APP FOUND");
         }
     }
+    
+    @ReactMethod
+    public void openPackage(String packageName, final Promise promise) {
+        PackageManager pm = this.ctx.getPackageManager();
+        intentPromise = promise;
+        try {
+            Intent launchIntent = pm.getLaunchIntentForPackage(packageName);
+            if (launchIntent != null) {
+                this.ctx.startActivity(launchIntent);
+            } else {
+                intentPromise.reject("Failed", "NO APP FOUND");
+            }
+        } catch (Exception e) {
+        }
+    }
 
     @ReactMethod
     public void isPackageInstalled(String packageName, Callback cb) {
